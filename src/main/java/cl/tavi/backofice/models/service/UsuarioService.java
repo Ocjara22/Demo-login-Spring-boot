@@ -1,5 +1,6 @@
 package cl.tavi.backofice.models.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -30,15 +31,17 @@ public class UsuarioService implements UserDetailsService {
 	@Transactional(readOnly=true)
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		
-		Usuario usuario = userDao.findByUsername(username);
+		Usuario usuario = userDao.findByEmail(username);
 		
 		if(usuario == null) {
 			logger.error("Ha ocurrido un problema al obtener el usuario en capa de SVS: ");
 			throw new UsernameNotFoundException("Me fui a la shit!!");
 		}
 		
-		List<GrantedAuthority> authorities = null;
-		return new User(usuario.getEmail(),usuario.getPassword(), true, true, true, false, authorities);
+		List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
+		return new User(usuario.getUsername(), usuario.getPassword(), true, true, true, true, authorities);
 	}
+	
+	
 
 }

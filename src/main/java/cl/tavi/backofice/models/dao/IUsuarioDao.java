@@ -1,16 +1,20 @@
 package cl.tavi.backofice.models.dao;
 
+//import org.springframework.data.jpa.repository.JpaRepository;
+//import org.springframework.data.jpa.repository.Query;
 //import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
 
 import cl.tavi.backofice.models.entity.Usuario;
 
 
-
+@Repository
 public interface IUsuarioDao extends CrudRepository<Usuario, Long>{
 
-		
-		public Usuario findByUsername(String username);
-		
+		//Login de email
+		Usuario findByEmail(String username);
 
+		//Registra usuario
+		Usuario save(Usuario usuario);
 }

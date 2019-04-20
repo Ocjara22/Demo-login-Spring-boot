@@ -1,15 +1,13 @@
 package cl.tavi.backofice.models.entity;
 import java.io.Serializable;
-//import java.util.List;
 
-//import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-//import javax.persistence.FetchType;
+
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-//import javax.persistence.ManyToMany;
+
 import javax.persistence.Table;
 
 @Entity
@@ -34,6 +32,10 @@ public class Usuario implements Serializable{
 	
 	@Column(length=1000)
 	private String password;
+	
+	//private List<Telefono> phones;
+	
+	//private List<Roles> roles;
 	
 
 	public Long getId() {
@@ -75,6 +77,15 @@ public class Usuario implements Serializable{
 	public void setUsername(String username) {
 		this.username = username;
 	}
+
+	@Override
+	public String toString() {
+		return "Usuario [id=" + id + ", username=" + username + ", name=" + name + ", email=" + email + ", password="
+				+ password + "]";
+	}
+
+	
+
 	
 
 
