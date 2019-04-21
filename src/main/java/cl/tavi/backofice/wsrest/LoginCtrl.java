@@ -1,7 +1,9 @@
 package cl.tavi.backofice.wsrest;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import cl.tavi.backofice.exception.EmailRegistradoException;
 import cl.tavi.backofice.models.entity.Telefono;
 import cl.tavi.backofice.models.entity.Usuario;
 import cl.tavi.backofice.models.service.UserService;
@@ -31,25 +34,35 @@ public class LoginCtrl {
 	private Logger logger = LoggerFactory.getLogger(UsuarioService.class);
 	
 	@PostMapping(value="/registro")
-	public @ResponseBody ResponseEntity<Usuario> registroUsuario(
+	public @ResponseBody ResponseEntity<Map<String,Object>>registroUsuario(
 			@RequestParam(value="email", required = true) String email,
 			@RequestParam(value="username", required = true) String userName,
 			@RequestParam(value="password", required = true) String password
+		//	@RequestBody Usuario user
 			){
+		
+		Map<String, Object> model = new HashMap<String,Object>();
 		
 		Usuario usuario = new Usuario();
 		Usuario Response= new Usuario();
 		List<Telefono> phones = new ArrayList<Telefono>();
-		
+	
 		usuario.setEmail(email);
 		usuario.setPassword(password);
 		usuario.setUsername(userName);
+
+		
 		try {
 			Response = this.userService.saveUser(usuario, phones);
-		}catch(Exception e) {
-			logger.error("Ha ocurrido un problema al registrar el usuario: "+e.getMessage());
-		}
-		return new ResponseEntity<Usuario>(Response,HttpStatus.OK);
+			model.put("response", Response);
+			model.put("mensaje", "OK");
+		} catch (EmailRegistradoException e) {
+			logger.error("Ha ocurrido un problema al registrar el usuario: ");
+			model.put("mensaje", e.getMessage());
+			return new ResponseEntity<Map<String,Object>>(model,HttpStatus.NOT_ACCEPTABLE);
+		}		
+		
+		return new ResponseEntity<Map<String,Object>>(model,HttpStatus.OK);
 	}
 	
 	

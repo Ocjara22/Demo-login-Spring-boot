@@ -33,7 +33,8 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
 	@Override
 	public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-		clients.inMemory().withClient("reactApp")
+		clients.inMemory()
+		.withClient("reactApp")
 		.secret(passwordEncoder.encode("12345"))
 		.scopes("read","write")
 		.authorizedGrantTypes("password", "refresh_token").accessTokenValiditySeconds(1800)

@@ -6,20 +6,28 @@ import java.util.List;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import cl.tavi.backofice.exception.EmailRegistradoException;
 import cl.tavi.backofice.models.entity.Telefono;
 import cl.tavi.backofice.models.entity.Usuario;
 import cl.tavi.backofice.models.service.UserService;
+import cl.tavi.backofice.models.service.UsuarioService;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes=BackofficeApiRestLoginApplication.class)
 public class ServiceTest {
 	
+	private Logger logger = LoggerFactory.getLogger(UsuarioService.class);
+	
 	@Autowired
 	private UserService userService;
+	
+	
 	
 	@Ignore
 	@Test
@@ -44,7 +52,12 @@ public class ServiceTest {
 		usuario.setEmail("ocjara@prueba3.com");
 		usuario.setPassword("12345");
 		usuario.setUsername("prueba46");
-		Usuario test= this.userService.saveUser(usuario, phones);
+		Usuario test = new Usuario();
+		try {
+			test = this.userService.saveUser(usuario, phones);
+		} catch (EmailRegistradoException e) {
+			logger.info("");
+		}
 		System.out.println(test);
 	}
 	
