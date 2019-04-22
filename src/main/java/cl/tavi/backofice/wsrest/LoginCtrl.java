@@ -9,14 +9,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import cl.tavi.backofice.dto.Registro;
 import cl.tavi.backofice.exception.EmailRegistradoException;
 import cl.tavi.backofice.models.entity.Telefono;
 import cl.tavi.backofice.models.entity.Usuario;
@@ -35,10 +37,10 @@ public class LoginCtrl {
 	
 	@PostMapping(value="/registro")
 	public @ResponseBody ResponseEntity<Map<String,Object>>registroUsuario(
-			@RequestParam(value="email", required = true) String email,
-			@RequestParam(value="username", required = true) String userName,
-			@RequestParam(value="password", required = true) String password
-		//	@RequestBody Usuario user
+//			@RequestParam(value="email", required = true) String email,
+//			@RequestParam(value="username", required = true) String userName,
+//			@RequestParam(value="password", required = true) String password
+			@RequestBody Registro user
 			){
 		
 		Map<String, Object> model = new HashMap<String,Object>();
@@ -46,11 +48,11 @@ public class LoginCtrl {
 		Usuario usuario = new Usuario();
 		Usuario Response= new Usuario();
 		List<Telefono> phones = new ArrayList<Telefono>();
-	
-		usuario.setEmail(email);
-		usuario.setPassword(password);
-		usuario.setUsername(userName);
-
+		
+		usuario.setEmail(user.getEmail());
+		usuario.setPassword(user.getPassword());
+		usuario.setUsername(user.getName());
+		phones = user.getPhones();
 		
 		try {
 			Response = this.userService.saveUser(usuario, phones);
