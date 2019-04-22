@@ -31,7 +31,8 @@ public class Telefono implements Serializable{
 	
 	@Column(length=10)
     private String contrycode;
-     
+    
+	@Column()
     private Long idusuario;
 
 	public Long getId() {
